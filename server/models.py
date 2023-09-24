@@ -10,7 +10,7 @@ from config import db
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.orm import validates
-from config import db
+from config import db, ma
 import bcrypt
 
 # Define the Employee-Task association table
@@ -91,4 +91,30 @@ class Department(db.Model, SerializerMixin):
 
     def __repr__(self):
         return f"Department {self.name}, ID: {self.id}, Task_id: {self.task_id}"
+
+# Employee schema
+class EmployeeSchema(ma.Schema):
+    class Meta:
+        fields = ('id', 'name', 'username', 'clocked_in', 'clocked_out')
+
+employee_schema = EmployeeSchema()
+employees_schema = EmployeeSchema(many=True)
+
+# # Task schema
+# class TaskSchema(ma.Schema):
+#     class Meta:
+#         fields = ('id', 'name')
+
+# task_schema = TaskSchema()
+# tasks_schema = TaskSchema(many=True)
+
+# # Department schema
+# class DepartmentSchema(ma.Schema):
+#     class Meta:
+#         fields = ('id', 'name')
+
+# department_schema = DepartmentSchema()
+# departments_schema = DepartmentSchema(many=True)
+
+
 
