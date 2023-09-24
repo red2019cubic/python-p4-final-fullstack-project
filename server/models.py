@@ -32,7 +32,9 @@ employee_department = db.Table('employee_department',
 # Define the Employee table
 class Employee(db.Model, SerializerMixin):
 
-    serialize_rules = ('-tasks.employee', '-departments.employee',)
+    serialize_rules = (
+        "-tasks.employee","-departments.employee", "-_password_hash"
+    )
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False, unique=True)
