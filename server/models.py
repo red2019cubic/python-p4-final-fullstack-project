@@ -49,7 +49,8 @@ class Employee(db.Model, SerializerMixin):
 
     @hybrid_property  # Restrict access to the password hash.
     def password_hash(self):
-        raise Exception("Password hashes may not be viewed.")
+        # raise Exception("Password hashes may not be viewed.")
+        pass
 
     # Generate a Bcrypt password hash and set it to the _password_hash attribute
     @password_hash.setter
