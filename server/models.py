@@ -100,13 +100,13 @@ class EmployeeSchema(ma.Schema):
 employee_schema = EmployeeSchema()
 employees_schema = EmployeeSchema(many=True)
 
-# # Task schema
-# class TaskSchema(ma.Schema):
-#     class Meta:
-#         fields = ('id', 'name')
+# Task schema
+class TaskSchema(ma.Schema):
+    class Meta:
+        fields = ('id', 'name')
 
-# task_schema = TaskSchema()
-# tasks_schema = TaskSchema(many=True)
+task_schema = TaskSchema()
+tasks_schema = TaskSchema(many=True)
 
 # # Department schema
 # class DepartmentSchema(ma.Schema):
