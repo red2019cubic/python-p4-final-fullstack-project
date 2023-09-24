@@ -25,7 +25,8 @@ employee_department = db.Table('employee_department',
 )
 
 class Employee(db.Model, SerializerMixin):
-    
+
+    serialize_rules=('-tasks.employee', '-departments.employee',)
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
@@ -35,7 +36,7 @@ class Employee(db.Model, SerializerMixin):
     clocked_out = db.Column(db.DateTime, onupdate=db.func.now())
     _password_hash = db.Column(db.String)
     
-    tasks = db.relationship('Task',secondary=employee_task, backref=db.backref('employees', lazy='dynamic'))
+    tasks = db.relationship('Task',secondary=employee_task, backref=db.backref('employee', lazy='dynamic'))
     departments = db.relationship('Department', secondary=employee_department, backref=db.backref('employees', lazy='dynamic'))
 
     @hybrid_property # Restrict access to the password hash.
@@ -55,14 +56,11 @@ class Employee(db.Model, SerializerMixin):
     
 class Task(db.Model, SerializerMixin):
  
-
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     
-
-
     def __repr__(self):
-        return f"Task {self.task_name}, ID: {self.id}"
+        return f"Task {self.name}, ID: {self.id}"
 
 
 
@@ -72,11 +70,11 @@ class Department(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
+    task_id = db.Column(db.Integer, db.ForeignKey('task.id'))
 
-
-
+    Task.department = db.relationship('Department', backref='task')
 
     def __repr__(self):
-        return f"Department {self.dept_title}, ID: {self.id}"
+        return f"Department {self.name}, ID: {self.id}, Task_id: {self.task_id}"
 
 
