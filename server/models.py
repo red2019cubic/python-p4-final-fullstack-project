@@ -108,13 +108,13 @@ class TaskSchema(ma.Schema):
 task_schema = TaskSchema()
 tasks_schema = TaskSchema(many=True)
 
-# # Department schema
-# class DepartmentSchema(ma.Schema):
-#     class Meta:
-#         fields = ('id', 'name')
+# Department schema
+class DepartmentSchema(ma.Schema):
+    class Meta:
+        fields = ('id', 'name')
 
-# department_schema = DepartmentSchema()
-# departments_schema = DepartmentSchema(many=True)
+department_schema = DepartmentSchema()
+departments_schema = DepartmentSchema(many=True)
 
 
 
