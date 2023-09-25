@@ -11,7 +11,7 @@ from flask_marshmallow import Marshmallow
 from config import app, db, api
 # Add your model imports
 from models import Employee, Task, Department
-from models import employees_schema, employee_schema, tasks_schema, task_schema
+from models import employees_schema, employee_schema, tasks_schema, task_schema, departments_schema, department_schema
 
 # Views go here!
 
@@ -22,6 +22,7 @@ def index():
 
 
 class Employees(Resource):
+    
     def get(self):
         employee_list = Employee.query.all()
         response = make_response(employees_schema.jsonify(employee_list),
@@ -54,9 +55,8 @@ api.add_resource(Employees, "/employees")
 
 
 class EmployeeByID(Resource):
-    
+
     def get(self, id):
-        
         employee = Employee.query.filter_by(id=id).first()
         if not employee:
             return {"error": "Employee not found"}, 404
@@ -64,7 +64,6 @@ class EmployeeByID(Resource):
         return response
 
     def patch(self, id):
-        
         employee = Employee.query.filter_by(id=id).first()
         if not employee:
             return {"error": "Employee not found"}, 404
@@ -79,7 +78,6 @@ class EmployeeByID(Resource):
         return response
 
     def delete(self, id):
-        
         employee = Employee.query.filter_by(id=id).first()
         if not employee:
             return {"error": "Employee not found"}, 404
@@ -88,10 +86,11 @@ class EmployeeByID(Resource):
         response = make_response("Redcord Deleted seccessfully", 204)
         return response
 
-
 api.add_resource(EmployeeByID, "/employees/<int:id>")
 
+
 class Tasks(Resource):
+    
     def get(self):
         task_list = Task.query.all()
         response = make_response(tasks_schema.jsonify(task_list),
@@ -104,7 +103,7 @@ class Tasks(Resource):
         form_json = request.get_json()
         new_task = Task(
             name=form_json["name"],
-          )
+        )
 
         db.session.add(new_task)
         db.session.commit()
@@ -115,14 +114,12 @@ class Tasks(Resource):
         )
         return response
 
-
 api.add_resource(Tasks, "/tasks")
 
 
 class TaskByID(Resource):
-    
+
     def get(self, id):
-        
         task = Task.query.filter_by(id=id).first()
         if not task:
             return {"error": "Employee not found"}, 404
@@ -130,7 +127,6 @@ class TaskByID(Resource):
         return response
 
     def patch(self, id):
-        
         task = Task.query.filter_by(id=id).first()
         if not task:
             return {"error": "Task not found"}, 404
@@ -145,7 +141,6 @@ class TaskByID(Resource):
         return response
 
     def delete(self, id):
-        
         task = Task.query.filter_by(id=id).first()
         if not task:
             return {"error": "Task not found"}, 404
@@ -154,8 +149,68 @@ class TaskByID(Resource):
         response = make_response("Redcord Deleted seccessfully", 204)
         return response
 
-
 api.add_resource(TaskByID, "/tasks/<int:id>")
+
+class Departments(Resource):
+    
+    def get(self):
+        dept_list = Department.query.all()
+        response = make_response(departments_schema.jsonify(dept_list),
+                                 200,
+                                 )
+
+        return response
+
+    def post(self):
+        form_json = request.get_json()
+        new_dept = Department(
+            name=form_json["name"],
+        )
+
+        db.session.add(new_dept)
+        db.session.commit()
+        response_dict = new_dept.to_dict()
+        response = make_response(
+            response_dict,
+            201,
+        )
+        return response
+    
+api.add_resource(Departments, "/departments")
+
+class DepartmentByID(Resource):
+
+    def get(self, id):
+        dept = Department.query.filter_by(id=id).first()
+        if not dept:
+            return {"error": "Employee not found"}, 404
+        response = make_response(department_schema.jsonify(dept), 200)
+        return response
+
+    def patch(self, id):
+        dept = Department.query.filter_by(id=id).first()
+        if not dept:
+            return {"error": "Task not found"}, 404
+        for attr in request.form:
+            setattr(dept, attr, request.form[attr])
+        db.session.add(dept)
+        db.session.commit()
+        response = make_response(
+            task_schema.jsonify(dept),
+            200
+        )
+        return response
+
+    def delete(self, id):
+        dept = Department.query.filter_by(id=id).first()
+        if not dept:
+            return {"error": "Task not found"}, 404
+        db.session.delete(dept)
+        db.session.commit()
+        response = make_response("Redcord Deleted seccessfully", 204)
+        return response
+
+api.add_resource(DepartmentByID, "/departments/<int:id>")
 
 
 if __name__ == '__main__':
