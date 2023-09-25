@@ -57,12 +57,12 @@ class Employee(db.Model, SerializerMixin):
     # Generate a Bcrypt password hash and set it to the _password_hash attribute
     @password_hash.setter
     def password_hash(self, password):
-        bcrypt_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        bcrypt_hash = bcrypt.hashpw(password, bcrypt.gensalt())
         self._password_hash = bcrypt_hash
 
     # Check if the provided password matches the one stored in the db
     def authenticate(self, password):
-        return bcrypt.check_password_hash(self._password_hash, password)
+        return bcrypt.checkpw(password.encode(), self._password_hash)
 
     # validate username
     @validates('username')

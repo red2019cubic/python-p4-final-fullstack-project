@@ -3,9 +3,10 @@
 # Standard library imports
 import random
 # Remote library imports
-from flask import request, make_response,jsonify
+from flask import request, make_response,jsonify, session
 from flask_restful import Resource
-from flask_marshmallow import Marshmallow
+from sqlalchemy.exc import IntegrityError
+
 
 # Local imports
 from config import app, db, api
@@ -36,6 +37,9 @@ class Employees(Resource):
 
     def post(self):
         form_json = request.get_json()
+        errors = check_for_missing_values(form_json)
+        if len(errors) > 0:
+            return {"errors": errors}, 422
         new_employee = Employee(
             name=form_json["name"],
             username=form_json["username"],
@@ -45,9 +49,10 @@ class Employees(Resource):
 
         tasks =Task.query.all()
         departments = Department.query.all()
-        number = random.randint(0, len(tasks))  
-        task_a = tasks[number].name
-        department_a = departments[number].name
+        num_1 = random.randint(0, len(tasks))  
+        num_2 = random.randint(0, len(departments))
+        task_a = tasks[num_1].name
+        department_a = departments[num_2].name
         new_employee.tasks.append(Task(name=task_a))
         new_employee.departments.append(Department(name=department_a))
         db.session.add(new_employee)
@@ -108,6 +113,9 @@ class Tasks(Resource):
 
     def post(self):
         form_json = request.get_json()
+        errors = check_for_missing_values(form_json)
+        if len(errors) > 0:
+            return {"errors": errors}, 422
         new_task = Task(
             name=form_json["name"],
         )
@@ -137,7 +145,7 @@ class TaskByID(Resource):
         task = Task.query.filter_by(id=id).first()
         if not task:
             return {"error": "Task not found"}, 404
-        if 'admin' in request.json:
+        if 'name' in request.json:
             task.name = request.json['name']
         db.session.add(task)
         db.session.commit()
@@ -170,20 +178,37 @@ class Departments(Resource):
 
     def post(self):
         form_json = request.get_json()
+        errors = check_for_missing_values(form_json)
+        if len(errors) > 0:
+            return {"errors": errors}, 422
         new_dept = Department(
             name=form_json["name"],
         )
+        try:
+            db.session.add(new_dept)
+            db.session.commit()
+            response_dict = new_dept.to_dict()
+            response = make_response(
+                response_dict,
+                201,
+            )
+            return jsonify({'message': 'Department added successfully'})
+        except IntegrityError as e:
+            if isinstance(e, (IntegrityError)):
+                for error in e.orig.args:
+                    if "UNIQUE" in error:
+                        errors.append("Email already taken. Please try again")# Get the error message as a string
 
-        db.session.add(new_dept)
-        db.session.commit()
-        response_dict = new_dept.to_dict()
-        response = make_response(
-            response_dict,
-            201,
-        )
-        return jsonify({'message': 'Department added successfully'})
+            return {'errors': errors}, 422
     
 api.add_resource(Departments, "/departments")
+
+def check_for_missing_values(data):
+    errors_list = []
+    for key, value in data.items():
+        if not value:
+            errors_list.append(f"{key} is required")
+    return errors_list
 
 class DepartmentByID(Resource):
 
@@ -219,6 +244,19 @@ class DepartmentByID(Resource):
         return response
 
 api.add_resource(DepartmentByID, "/departments/<int:id>")
+
+@app.route('/login', methods=["POST"])
+def login():
+    data = request.get_json()
+    employee = Employee.query.filter(Employee.username == data['username']).first()
+    if employee:
+        if employee.authenticate(data['password_hash']):
+            session["emp_id"] = employee.id 
+            return employee_schema.jsonify(employee), 200
+        else:
+            return {"errors": ["Username or password incorrect"]}, 401
+    else:
+        return {"errors": ["Username or password incorrect"]}, 401
 
 
 if __name__ == '__main__':

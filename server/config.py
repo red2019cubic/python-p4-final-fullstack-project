@@ -16,6 +16,7 @@ from flask_marshmallow import Marshmallow
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.secret_key = b'B\xed\xce\xec\xc3\xcf\xe9-\xe4\xc0\x98\xb8\xbe\xa0\x943'
 app.json.compact = False
 
 # Define metadata, instantiate db
