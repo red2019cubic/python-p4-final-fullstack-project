@@ -95,14 +95,6 @@ class Department(db.Model, SerializerMixin):
     def __repr__(self):
         return f"Department {self.name}, ID: {self.id}, Task_id: {self.task_id}"
 
-# Employee schema
-class EmployeeSchema(ma.Schema):
-    class Meta:
-        fields = ('id', 'name', 'username', 'clocked_in', 'clocked_out')
-
-employee_schema = EmployeeSchema()
-employees_schema = EmployeeSchema(many=True)
-
 # Task schema
 class TaskSchema(ma.Schema):
     class Meta:
@@ -118,6 +110,22 @@ class DepartmentSchema(ma.Schema):
 
 department_schema = DepartmentSchema()
 departments_schema = DepartmentSchema(many=True)
+
+
+
+
+
+# Employee schema
+class EmployeeSchema(ma.Schema):
+    class Meta:
+        fields = ('id', 'name', 'username', 'clocked_in', 'clocked_out')
+        tasks = ma.Nested(tasks_schema)
+        departments = ma.Nested(departments_schema)
+
+employee_schema = EmployeeSchema()
+employees_schema = EmployeeSchema(many=True)
+
+
 
 
 

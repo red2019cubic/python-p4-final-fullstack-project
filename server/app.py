@@ -52,53 +52,44 @@ class Employees(Resource):
 
 api.add_resource(Employees, "/employees")
 
+
 class EmployeeByID(Resource):
+    
     def get(self, id):
         
         employee = Employee.query.filter_by(id=id).first()
-        print(employee)
-      
-        print(employee)
         if not employee:
             return {"error": "Employee not found"}, 404
         response = make_response(employee_schema.jsonify(employee), 200)
-        
         return response
 
-    # def patch(self, id):
-    #     employee = Employee.query.filter_by(id=id).first()
-    #     if not employee:
-    #         return {"error": "Employee not found"}, 404
+    def patch(self, id):
+        
+        employee = Employee.query.filter_by(id=id).first()
+        if not employee:
+            return {"error": "Employee not found"}, 404
+        for attr in request.form:
+            setattr(employee, attr, request.form[attr])
+        db.session.add(employee)
+        db.session.commit()
+        response = make_response(
+            employee_schema.jsonify(employee),
+            200
+        )
+        return response
 
-    #     for attr in request.form:
-    #         setattr(employee, attr, request.form[attr])
-
-    #     employee.name = request.form["name"]
-    #     employee.username = request.form["username"]
-    #     employee.password_hash = request.form["password_hash"]
-
-    #     db.session.add(employee)
-    #     db.session.commit()
-
-    #     employee_dict = employee.to_dict()
-
-    #     response = make_response(employee_dict, 200)
-    #     return response
-
-    # def delete(self, id):
-    #     employee = Employee.query.filter_by(id=id).first()
-    #     if not employee:
-    #         return {"error": "Employee not found"}, 404
-    #     db.session.delete(employee)
-    #     db.session.commit()
-
-    #     response = make_response("", 204)
-
-    #     return response
+    def delete(self, id):
+        
+        employee = Employee.query.filter_by(id=id).first()
+        if not employee:
+            return {"error": "Employee not found"}, 404
+        db.session.delete(employee)
+        db.session.commit()
+        response = make_response("Redcord Deleted seccessfully", 204)
+        return response
 
 
 api.add_resource(EmployeeByID, "/employees/<int:id>")
-
 
 
 if __name__ == '__main__':
