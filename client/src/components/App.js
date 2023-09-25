@@ -1,5 +1,5 @@
 import React from 'react';
-import LogInForm from './Login/LogInForm';
+import LogInForm from '../LogInForm';
 
 function App() {
   return (

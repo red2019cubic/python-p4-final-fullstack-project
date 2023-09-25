@@ -54,12 +54,12 @@ function LogInForm({ updateUser }) {
     alignItems: "center",
   };
   return (
-    <div className="container">
+    <div className="container" style={{color:"blue"}}>
       <div className="row justify-content-center">
         <div className="col-sm-8">
           <h2>CVG9 Employee Login</h2>
         <form action="/login" method="POST">
-          <div class="mb-3 mt-3">
+          <div class="form-group">
             <label for="email" class="form-label">
               Email:
             </label>
