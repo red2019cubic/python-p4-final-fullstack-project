@@ -11,7 +11,7 @@ from flask_marshmallow import Marshmallow
 from config import app, db, api
 # Add your model imports
 from models import Employee, Task, Department
-from models import employees_schema, employee_schema
+from models import employees_schema, employee_schema, tasks_schema, task_schema
 
 # Views go here!
 
@@ -90,6 +90,72 @@ class EmployeeByID(Resource):
 
 
 api.add_resource(EmployeeByID, "/employees/<int:id>")
+
+class Tasks(Resource):
+    def get(self):
+        task_list = Task.query.all()
+        response = make_response(tasks_schema.jsonify(task_list),
+                                 200,
+                                 )
+
+        return response
+
+    def post(self):
+        form_json = request.get_json()
+        new_task = Task(
+            name=form_json["name"],
+          )
+
+        db.session.add(new_task)
+        db.session.commit()
+        response_dict = new_task.to_dict()
+        response = make_response(
+            response_dict,
+            201,
+        )
+        return response
+
+
+api.add_resource(Tasks, "/tasks")
+
+
+class TaskByID(Resource):
+    
+    def get(self, id):
+        
+        task = Task.query.filter_by(id=id).first()
+        if not task:
+            return {"error": "Employee not found"}, 404
+        response = make_response(task_schema.jsonify(task), 200)
+        return response
+
+    def patch(self, id):
+        
+        task = Task.query.filter_by(id=id).first()
+        if not task:
+            return {"error": "Task not found"}, 404
+        for attr in request.form:
+            setattr(task, attr, request.form[attr])
+        db.session.add(task)
+        db.session.commit()
+        response = make_response(
+            task_schema.jsonify(task),
+            200
+        )
+        return response
+
+    def delete(self, id):
+        
+        task = Task.query.filter_by(id=id).first()
+        if not task:
+            return {"error": "Task not found"}, 404
+        db.session.delete(task)
+        db.session.commit()
+        response = make_response("Redcord Deleted seccessfully", 204)
+        return response
+
+
+api.add_resource(TaskByID, "/tasks/<int:id>")
 
 
 if __name__ == '__main__':
