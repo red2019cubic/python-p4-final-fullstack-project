@@ -1,8 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { Switch, Route } from "react-router-dom";
+import React from 'react';
+import LogInForm from './Login/LogInForm';
 
 function App() {
-  return <h1>Project Client</h1>;
+  return (
+    <div className="App">
+      <LogInForm />
+    </div>
+  );
 }
 
 export default App;
+
