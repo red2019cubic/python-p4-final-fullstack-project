@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
+import Header from "./Header.js"
+import "./Header.css"
 
 
 function SignUpForm({ updateUser }) {
@@ -37,35 +39,43 @@ function SignUpForm({ updateUser }) {
   //     }
   //   });
   // };
-  const divStyle = {
-    color:"orange",
-    backgroundColor: "darkblue",
-    width: '100%',
-    height: '100%',
-  };
+
   return (
+    <>
+    <Header />
     <div className="container" >
       <div className="row justify-content-center">
         <div className="col-sm-8">
-          <h1 className="row justify-content-center" style={{backgroundColor: "darkblue", color:"darkorange",}}>CVG9 Employee Login</h1>
+        <h2
+            className="row justify-content-center" 
+            style={{ color: "darkorange" }}
+          >
+            CVG9 Employee Login
+          </h2>
           <br/>
-          <br/>
-          <br/>
+
+          <div>
+            <img
+              className="row justify-content-center" style={{width:"100%", marginLeft:"5px"}}
+              src="https://t4.ftcdn.net/jpg/06/29/59/93/240_F_629599337_BHJl5tJee7b5GtRZUOTylDwRR4N4chSZ.jpg"
+            />
+ 
+          </div>
         <form action="/signup" method="POST">
           <div className="form-group">
-            <label for="name" className="form-label">
+            <label htmlFor="name" className="form-label">
               Name:
             </label>
             <input
               type="email"
               className="form-control"
-              id="email"
+              id="name"
               placeholder="Enter your name"
               name="name"
             />
           </div>
           <div className="form-group">
-            <label for="email" className="form-label">
+            <label htmlFor="email" className="form-label">
               Email:
             </label>
             <input
@@ -77,7 +87,18 @@ function SignUpForm({ updateUser }) {
             />
           </div>
           <div className="mb-3">
-            <label for="pwd" className="form-label">
+            <label  htmlFor = "admin" className="form-label">
+              Admin:
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Enter 0 or 1"
+              name="admin"
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="pwd" className="form-label">
               Password:
             </label>
             <input
@@ -88,15 +109,11 @@ function SignUpForm({ updateUser }) {
               name="password"
             />
           </div>
-          <div className="form-check mb-3">
-            <label className="form-check-label">
-              <input className="form-check-input" type="checkbox" name="remember" />{" "}
-              Remember me
-            </label>
-          </div>
-          <button type="submit" className="btn btn-primary" style={{marginRight:"20px"}}>
-              LogIn
-            </button>
+ 
+
+            <a href="/login" className="btn btn-primary">
+            LogIn
+            </a>
           
 
         </form>
@@ -105,6 +122,7 @@ function SignUpForm({ updateUser }) {
 
       </div>
     </div>
+    </>
   );
 }
 

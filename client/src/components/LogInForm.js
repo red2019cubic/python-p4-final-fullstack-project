@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
-
+import Header from "./Header.js"
+import "./Header.css"
+import { useNavigate } from "react-router-dom"
 const LoginForm = () => {
   const [formData, setFormData] = useState({
     username: "",
@@ -14,7 +16,7 @@ const LoginForm = () => {
       [name]: value,
     });
   };
-
+ const navigate = useNavigate()
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -25,6 +27,7 @@ const LoginForm = () => {
       );
 
       console.log(response.data);
+     navigate("/signup")
       // Handle successful login, e.g., redirect to a dashboard.
     } catch (error) {
       console.error(error);
@@ -33,15 +36,12 @@ const LoginForm = () => {
   };
 
   return (
+    <>
+    <Header />
     <div className="container">
       <div className="row justify-content-center">
         <div className="col-sm-8">
-          <h2
-            className="row justify-content-center" 
-            style={{ color: "darkorange" }}
-          >
-            CVG9 Employee Login
-          </h2>
+        
           <br/>
           <div>
             <img
@@ -92,6 +92,7 @@ const LoginForm = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
