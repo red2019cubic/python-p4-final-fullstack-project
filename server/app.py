@@ -46,7 +46,6 @@ class Employees(Resource):
         tasks =Task.query.all()
         departments = Department.query.all()
         number = random.randint(0, len(tasks))  
-        print(type(tasks[number].name)) 
         task_a = tasks[number].name
         department_a = departments[number].name
         new_employee.tasks.append(Task(name=task_a))
@@ -73,8 +72,10 @@ class EmployeeByID(Resource):
         employee = Employee.query.filter_by(id=id).first()
         if not employee:
             return {"error": "Employee not found"}, 404
-        for attr in request.form:
-            setattr(employee, attr, request.form[attr])
+        elif 'admin' in request.json:
+            employee.admin = request.json['admin']
+        elif 'username' in request.json:
+            employee.username = request.json['username']
         db.session.add(employee)
         db.session.commit()
         response = make_response(
@@ -89,8 +90,8 @@ class EmployeeByID(Resource):
             return {"error": "Employee not found"}, 404
         db.session.delete(employee)
         db.session.commit()
-        response = make_response("Redcord Deleted seccessfully", 204)
-        return response
+        
+        return jsonify({'message': 'Record deleted successfully'})
 
 api.add_resource(EmployeeByID, "/employees/<int:id>")
 
@@ -118,7 +119,7 @@ class Tasks(Resource):
             response_dict,
             201,
         )
-        return jsonify({'message': 'Task added successfully'})
+        return response
 
 api.add_resource(Tasks, "/tasks")
 
@@ -136,8 +137,8 @@ class TaskByID(Resource):
         task = Task.query.filter_by(id=id).first()
         if not task:
             return {"error": "Task not found"}, 404
-        for attr in request.form:
-            setattr(task, attr, request.form[attr])
+        if 'admin' in request.json:
+            task.name = request.json['name']
         db.session.add(task)
         db.session.commit()
         response = make_response(
@@ -197,8 +198,9 @@ class DepartmentByID(Resource):
         dept = Department.query.filter_by(id=id).first()
         if not dept:
             return {"error": "Task not found"}, 404
-        for attr in request.form:
-            setattr(dept, attr, request.form[attr])
+        if 'name' in request.json:
+            dept.name = request.json['name']
+
         db.session.add(dept)
         db.session.commit()
         response = make_response(

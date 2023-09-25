@@ -29,11 +29,11 @@ employee_department = db.Table('employee_department',
                                          db.ForeignKey('department.id'))
                                )
 
-# Define the Employee table
+# Employee table
 class Employee(db.Model, SerializerMixin):
 
     serialize_rules = (
-         "-_password_hash",
+        "-_password_hash",
     )
 
     id = db.Column(db.Integer, primary_key=True)
@@ -43,7 +43,6 @@ class Employee(db.Model, SerializerMixin):
     clocked_in = db.Column(db.DateTime, server_default=db.func.now())
     clocked_out = db.Column(db.DateTime, onupdate=db.func.now())
     _password_hash = db.Column(db.String)
-
 
     tasks = db.relationship('Task', secondary=employee_task,
                             backref=db.backref('employee', lazy='dynamic'))
@@ -75,7 +74,7 @@ class Employee(db.Model, SerializerMixin):
     def __repr__(self):
         return f"Employee {self.username}, ID: {self.id}, Name:{self.name}, Clocked_IN:{self.clocked_in}, Clocked_OUT:{self.clocked_out}"
 
-# Define the Task table
+# Task table
 class Task(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
@@ -84,7 +83,7 @@ class Task(db.Model, SerializerMixin):
     def __repr__(self):
         return f"Task {self.name}, ID: {self.id}"
 
-# Define the Department table
+# Department table
 class Department(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
@@ -101,6 +100,7 @@ class TaskSchema(ma.Schema):
     class Meta:
         fields = ('id', 'name')
 
+
 task_schema = TaskSchema()
 tasks_schema = TaskSchema(many=True)
 
@@ -109,26 +109,21 @@ class DepartmentSchema(ma.Schema):
     class Meta:
         fields = ('id', 'name')
 
+
 department_schema = DepartmentSchema()
 departments_schema = DepartmentSchema(many=True)
-
-
-
 
 
 # Employee schema
 class EmployeeSchema(ma.Schema):
     tasks = ma.Nested(tasks_schema, many=True)
     departments = ma.Nested(departments_schema, many=True)
+
     class Meta:
-        fields = ('id', 'name', 'username', 'clocked_in', 'clocked_out', "tasks", "departments")
+        fields = ('id', 'name', 'username', 'clocked_in','admin',
+                  'clocked_out', "tasks", "departments")
         ordered = True
-        
+
 
 employee_schema = EmployeeSchema()
 employees_schema = EmployeeSchema(many=True)
-
-
-
-
-
