@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 # Standard library imports
-
+import random
 # Remote library imports
-from flask import request, make_response
+from flask import request, make_response,jsonify
 from flask_restful import Resource
 from flask_marshmallow import Marshmallow
 
@@ -15,10 +15,13 @@ from models import employees_schema, employee_schema, tasks_schema, task_schema,
 
 # Views go here!
 
+    
 
 @app.route('/')
 def index():
-    return '<h1>Project Server</h1>'
+    employees = Employee.query.all()
+    result = employee_schema.dump(employees)
+    return jsonify(result)
 
 
 class Employees(Resource):
@@ -38,17 +41,20 @@ class Employees(Resource):
             username=form_json["username"],
             admin=form_json["admin"],
             password_hash=form_json["password_hash"],
-
         )
 
+        tasks =Task.query.all()
+        departments = Department.query.all()
+        number = random.randint(0, len(tasks))  
+        print(type(tasks[number].name)) 
+        task_a = tasks[number].name
+        department_a = departments[number].name
+        new_employee.tasks.append(Task(name=task_a))
+        new_employee.departments.append(Department(name=department_a))
         db.session.add(new_employee)
         db.session.commit()
-        response_dict = new_employee.to_dict()
-        response = make_response(
-            response_dict,
-            201,
-        )
-        return response
+      
+        return jsonify({'message': 'Employee added successfully'})
 
 
 api.add_resource(Employees, "/employees")
@@ -112,7 +118,7 @@ class Tasks(Resource):
             response_dict,
             201,
         )
-        return response
+        return jsonify({'message': 'Task added successfully'})
 
 api.add_resource(Tasks, "/tasks")
 
@@ -174,7 +180,7 @@ class Departments(Resource):
             response_dict,
             201,
         )
-        return response
+        return jsonify({'message': 'Department added successfully'})
     
 api.add_resource(Departments, "/departments")
 
@@ -215,3 +221,4 @@ api.add_resource(DepartmentByID, "/departments/<int:id>")
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
+

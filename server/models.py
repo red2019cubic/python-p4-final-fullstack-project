@@ -33,7 +33,7 @@ employee_department = db.Table('employee_department',
 class Employee(db.Model, SerializerMixin):
 
     serialize_rules = (
-        "-tasks.employee","-departments.employee", "-_password_hash"
+         "-_password_hash",
     )
 
     id = db.Column(db.Integer, primary_key=True)
@@ -43,6 +43,7 @@ class Employee(db.Model, SerializerMixin):
     clocked_in = db.Column(db.DateTime, server_default=db.func.now())
     clocked_out = db.Column(db.DateTime, onupdate=db.func.now())
     _password_hash = db.Column(db.String)
+
 
     tasks = db.relationship('Task', secondary=employee_task,
                             backref=db.backref('employee', lazy='dynamic'))
@@ -78,7 +79,7 @@ class Employee(db.Model, SerializerMixin):
 class Task(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False, unique=True)
+    name = db.Column(db.String, nullable=False)
 
     def __repr__(self):
         return f"Task {self.name}, ID: {self.id}"
@@ -87,7 +88,7 @@ class Task(db.Model, SerializerMixin):
 class Department(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False, unique=True)
+    name = db.Column(db.String, nullable=False)
     task_id = db.Column(db.Integer, db.ForeignKey('task.id'))
 
     Task.department = db.relationship('Department', backref='task')
@@ -117,10 +118,12 @@ departments_schema = DepartmentSchema(many=True)
 
 # Employee schema
 class EmployeeSchema(ma.Schema):
+    tasks = ma.Nested(tasks_schema, many=True)
+    departments = ma.Nested(departments_schema, many=True)
     class Meta:
-        fields = ('id', 'name', 'username', 'clocked_in', 'clocked_out')
-        tasks = ma.Nested(tasks_schema)
-        departments = ma.Nested(departments_schema)
+        fields = ('id', 'name', 'username', 'clocked_in', 'clocked_out', "tasks", "departments")
+        ordered = True
+        
 
 employee_schema = EmployeeSchema()
 employees_schema = EmployeeSchema(many=True)

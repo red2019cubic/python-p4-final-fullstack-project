@@ -43,9 +43,9 @@ with app.app_context():
     department10 = Department(name='JAM CLEANER')
 
     # Create sample employees and associate them with tasks and departments
-    employee1 = Employee(name=fake.name(), username=fake.email(),password_hash = fake.name(), admin=True,tasks=[task1, task2], departments=[department1])
-    employee2 = Employee(name=fake.name(), username=fake.email(),password_hash = fake.name(), admin=True,tasks=[task11], departments=[department2])
-    employee3 = Employee(name=fake.name(), username=fake.email(), password_hash = fake.name(), admin=True,tasks=[task5, task2], departments=[department3])
+    employee1 = Employee(name=fake.name(), username=fake.email(), admin=True,tasks=[task1, task2], departments=[department1])
+    employee2 = Employee(name=fake.name(), username=fake.email(), admin=True,tasks=[task11], departments=[department2])
+    employee3 = Employee(name=fake.name(), username=fake.email(), admin=True,tasks=[task5, task2], departments=[department3])
     employee4 = Employee(name=fake.name(), username=fake.email(), admin=True,tasks=[task10, task2], departments=[department10])
     employee5 = Employee(name=fake.name(), username=fake.email(), admin=True,tasks=[task1, task2], departments=[department5])
     employee6 = Employee(name=fake.name(), username=fake.email(), admin=True,tasks=[task1, task2], departments=[department1])
