@@ -6,19 +6,43 @@ import "./Header.css";
 import "./SignUp.css";
 import axios from "axios";
 import Footer from "./Footer.js";
-import { Formik, ErrorMessage } from "formik"
-import * as Yup from "yup"
+import {  useFormik } from "formik"
+import { SignUpSchema } from "./SignUpSchema.js";
 
 function SignUpForm() {
   
     const [response, setResponse] = useState(null);
-   
+    const onSubmit = async (values, actions) => {
+        
+    
+        try {
+          const response = await axios.post("/employees", formData);
+    
+          console.log(response.data);
+          navigate("/");
+        } catch (error) {
+          console.error(error);
+        }
+        actions.resetForm()
+      };
+    const formik = useFormik({
+        initialValues:
+        {
+        name:"",
+        username:"",
+        admin:'',
+        password:"",
+    },
+    validationSchema:SignUpSchema,
+    onSubmit,
+});
     const [formData, setFormData] = useState({
         username: "",
         name: "",
         admin: "",
         password: "",
       });
+
   
       // Make a PATCH request
       const handleUpdate = (id) => {
@@ -48,56 +72,21 @@ function SignUpForm() {
     };
 
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+//   const handleChange = (e) => {
+//     const { name, value } = e.target;
 
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+//     setFormData({
+//       ...formData,
+//       [name]: value,
+//     });
+//   };
   const navigate = useNavigate();
-  const handleSubmit = async (e) => {
-    e.preventDefault();
 
-    try {
-      const response = await axios.post("/employees", formData);
-
-      console.log(response.data);
-      navigate("/");
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  const SignupSchema = Yup.object().shape({
-    name: Yup.string()
-      .min(2, 'Too Short!')
-      .max(50, 'Too Long!')
-      .required('Required'),
-    username: Yup.string()
-      .min(2, 'Too Short!')
-      .max(15, 'Too Long!')
-      .required('Required'),
-    admin: Yup.string()
-      .email('Invalid admin code')
-      .required('Required'),
-    password: Yup.string()
-      .min(6, 'Password must be at least 6 characters')
-      .required('Required'),
-  });
+  
 
   return (
     <>
-    <Formik
-    initialValue={{
-        name:'',
-        username:'',
-        admin:"",
-        password:"",
-    }}
-    validationSchema={SignupSchema}
-    onSubmit={handleSubmit}
-    />
+
       <Header />
       <div className="container">
         <div className="row justify-content-center">
@@ -105,7 +94,7 @@ function SignUpForm() {
             <h2 className="row justify-content-center">SignUp Form</h2>
             <br />
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={formik.handleSubmit} autoComplete="off">
               <div className="form-group">
                 <label htmlFor="name" className="form-label">
                   Name:
@@ -116,10 +105,14 @@ function SignUpForm() {
                   id="name"
                   placeholder="Enter your name"
                   name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
+                  value={formik.values.name}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+
                 />
+                {formik.errors.name && formik.touched.name  && (
+                    <span className="field-error">{formik.errors.name}</span>
+                )}
             
               </div>
               <div className="form-group">
@@ -132,10 +125,14 @@ function SignUpForm() {
                   id="email"
                   placeholder="Enter email"
                   name="username"
-                  value={formData.username}
-                  onChange={handleChange}
+                  value={formik.values.username}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   required
                 />
+                {formik.errors.username && formik.touched.username  && (
+                    <span className="field-error">{formik.errors.username}</span>
+                )}
               </div>
               <div className="mb-3">
                 <label htmlFor="admin" className="form-label">
@@ -147,10 +144,14 @@ function SignUpForm() {
                   id="admin"
                   placeholder="Enter 0 or 1"
                   name="admin"
-                  value={formData.admin}
-                  onChange={handleChange}
-                  required
+                  value={formik.values.admin}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  
                 />
+                {formik.errors.admin && formik.touched.admin  && (
+                    <span className="field-error">{formik.errors.admin}</span>
+                )}
               </div>
               <div className="mb-3">
                 <label htmlFor="password" className="form-label">
@@ -162,10 +163,14 @@ function SignUpForm() {
                   id="password"
                   placeholder="Enter password"
                   name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  
                 />
+                {formik.errors.password && formik.touched.password  && (
+                    <span className="field-error">{formik.errors.password}</span>
+                )}
               </div>
 
               <button
@@ -177,7 +182,7 @@ function SignUpForm() {
               </button>
 
               <button
-                
+                disable={formik.isSubmitting}
                 onClick={() => handleUpdate(formData.id)}
                 className="btn btn-primary"
                 style={{ marginRight: "20px" }}
@@ -189,7 +194,7 @@ function SignUpForm() {
         </div>
       </div>
       <Footer />
-      <Formik/>
+     
     </>
   );
 }

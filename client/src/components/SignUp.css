@@ -6,3 +6,9 @@ h2 {
   color: darkorange;
   font-weight: bold;
 }
+
+
+.field-error {
+    border-color: red;
+    color:red
+}
