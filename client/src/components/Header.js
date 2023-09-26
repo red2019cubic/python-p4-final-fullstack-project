@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
@@ -8,22 +8,27 @@ const Header = () => {
         <div className="container">
           <ul>
             <li>
-            <Link to="/"> Home</Link>
+              <Link to="/"> Home</Link>
             </li>
             <li>
-            <Link to="/signup">Sign Up</Link>
+              <Link to="/signup">Sign Up</Link>
             </li>
             <li>
-            <Link to="/dashboard">Dashboard</Link>
+              <Link to="/dashboard">Dashboard</Link>
             </li>
             <li>
-            <div className="footer-logo">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxGUNWjxAr_TssIaqIwqDUDRb4maXS_ni068VKW7Vpbw&s" alt="Logo" />
-         </div>
+              <Link to="/view">View Employees</Link>
+            </li>
+            <li>
+              <div className="footer-logo">
+                <img
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxGUNWjxAr_TssIaqIwqDUDRb4maXS_ni068VKW7Vpbw&s"
+                  alt="Logo"
+                />
+              </div>
             </li>
           </ul>
         </div>
-
       </div>
     </>
   );

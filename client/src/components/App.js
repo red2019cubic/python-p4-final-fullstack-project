@@ -3,9 +3,11 @@ import LogInForm from "./LogInForm";
 import SignUpForm from "./SignUpForm";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./Home"
+import ViewEmployee from "./ViewEmployee"
 import { useState } from "react";
 import axios from "axios";
 import Dashboard from "./Dashboard";
+
 
 // import { useNavigate } from "react-router-dom"
 function App() {
@@ -49,6 +51,8 @@ function App() {
              <Route path="/login" element={<LogInForm handdleSubmit={handleSubmit} />} /> */}
             <Route path="/signup" element={<SignUpForm />} />
             <Route path="/dashboard" element={<Dashboard />} />
+
+            <Route path="/view" element={<ViewEmployee />} />
            
           </Routes>
         </Router>

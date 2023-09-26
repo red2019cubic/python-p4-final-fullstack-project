@@ -3,7 +3,7 @@ import React from "react";
 import Header from "./Header.js";
 import Footer from "./Footer.js";
 import LogInForm from "./LogInForm.js";
-import "./Home.css"
+import "./Home.css";
 
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -29,13 +29,13 @@ const Home = () => {
     <>
       <Header />
       <div>
-        <h2 >Welcome To CVG9 Faststart System</h2>
+        <h2>Welcome To CVG9 Faststart System</h2>
         <h3>Login To view your assignment</h3>
       </div>
-      
+
       <LogInForm />
-      <br/>
-      <br/>
+      <br />
+      <br />
       <Footer />
     </>
   );

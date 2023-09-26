@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
-import Header from "./Header.js"
-import Footer from "./Footer.js"
-import "./Header.css"
-import { useNavigate } from "react-router-dom"
+import Header from "./Header.js";
+import Footer from "./Footer.js";
+import "./Header.css";
+import { useNavigate } from "react-router-dom";
 const LoginForm = () => {
   const [formData, setFormData] = useState({
     username: "",
@@ -17,10 +17,9 @@ const LoginForm = () => {
     });
   };
 
-const navigate = useNavigate()
+  const navigate = useNavigate();
 
-
- const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
@@ -30,7 +29,7 @@ const navigate = useNavigate()
       );
 
       console.log(response.data);
-     navigate("/dashboard")
+      navigate("/dashboard");
       // Handle successful login, e.g., redirect to a dashboard.
     } catch (error) {
       console.error(error);
@@ -40,57 +39,58 @@ const navigate = useNavigate()
 
   return (
     <>
-    
-    <div className="container">
-      <div className="row justify-content-center">
-        <div className="col-sm-8">
-        
-          <br/>
+      <div className="container">
+        <div className="row justify-content-center">
+          <div className="col-sm-8">
+            <br />
 
-          <br/>
-          <form onSubmit={handleSubmit} method = "POST">
-            <div className="form-group">
-              <label htmlFor="name" className="form-label">
-                Email:
-              </label>
+            <br />
+            <form onSubmit={handleSubmit} method="POST">
+              <div className="form-group">
+                <label htmlFor="name" className="form-label">
+                  Email:
+                </label>
 
-              <input
-                type="text"
-                id="username"
-                className="form-control"
-                placeholder="Enter your email"
-                name="username"
-                value={formData.username}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="password" className="form-label">Password</label>
-              <input
-                type="password"
-                className="form-control"
-                placeholder="Enter password"
-                name="password"
-                id="password"
-                value={formData.password}
-                onChange={handleChange}
-              />
-            </div>
-            <br/>
-            <button type="submit" className="btn btn-primary" style={{marginRight:"20px"}}>
-              LogIn
-            </button>
-           
-            <a href="/signup" className="btn btn-primary">
-              SignUp
-            </a>
-        
-          </form>
+                <input
+                  type="text"
+                  id="username"
+                  className="form-control"
+                  placeholder="Enter your email"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleChange}
+                />
+              </div>
+              <div>
+                <label htmlFor="password" className="form-label">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  className="form-control"
+                  placeholder="Enter password"
+                  name="password"
+                  id="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
+              </div>
+              <br />
+              <button
+                type="submit"
+                className="btn btn-primary"
+                style={{ marginRight: "20px" }}
+              >
+                LogIn
+              </button>
+
+              <a href="/signup" className="btn btn-primary">
+                SignUp
+              </a>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
-    
-
     </>
   );
 };

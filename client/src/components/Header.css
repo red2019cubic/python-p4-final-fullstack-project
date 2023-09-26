@@ -1,29 +1,29 @@
 ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #333;
-  }
-  .footer-logo img {
-    background-color: "black";
-    width: 40px;
-    height: 40px;
-    margin-left: 700px;
-  }
-  
-  li {
-    float: left;
-  }
-  
-  li a {
-    display: block;
-    color: rgb(224, 137, 5);
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-  }
-  
-  li a:hover {
-    background-color: #070842;
-  }
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+.footer-logo img {
+  background-color: "black";
+  width: 40px;
+  height: 40px;
+  margin-left: 700px;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: rgb(224, 137, 5);
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover {
+  background-color: #070842;
+}
