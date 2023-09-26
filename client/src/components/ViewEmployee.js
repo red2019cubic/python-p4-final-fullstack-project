@@ -1,9 +1,52 @@
 import React, { useEffect, useState } from "react";
 import "./ViewEmployee.css";
 import Header from "./Header.js";
-import Footer from "./Footer.js"
+import Footer from "./Footer.js";
+import "./Header.css";
+import "./Footer.css"
+
 
 function ViewEmployee() {
+    const [data, setData] = useState({}); // Your updated data
+    const [response, setResponse] = useState(null);
+  
+
+
+      const payload = {
+        // Your updated data goes here
+        name: '',
+        username: '',
+      };
+  
+      // Make a PATCH request
+      const handleUpdate = (id) => {
+        fetch('/employees/${id}', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          // You may need to include other headers like authentication tokens here
+        },
+        body: JSON.stringify(payload),
+      })
+        .then((response) => {
+          // Handle the response (success or error)
+          setResponse(response);
+          return response.json();
+        })
+        .then((data) => {
+          // Handle the data received after the update
+          setData(data);
+        })
+        .catch((error) => {
+          // Handle any errors that occur during the fetch request
+          console.error('Error:', error);
+        });
+    
+    };
+
+
+  
+  
   const [employees, setEmployees] = useState([]);
   const [search, setSearch] = useState("");
   try {
@@ -17,7 +60,14 @@ function ViewEmployee() {
   } catch (error) {
     console.error(error);
   }
-
+  const handleDelete = (id) => {
+    fetch(
+      `/employees/${id}`,
+      { method: "DELETE" }
+    ).then((res) => {
+      alert(`${res.name} Record Deleted Successfully`);
+    });
+  };
   return (
    <>
      <Header /> 
@@ -25,9 +75,9 @@ function ViewEmployee() {
       <div className="formsearch">
         <input
           type="search"
-          className="form-control"
+          className="form-control1"
           id="datatable-search-input"
-          placeholder="Search Player"
+          placeholder="Search Employee By Name"
           aria-label="Search"
           onChange={(e) => setSearch(e.target.value)}
         />
@@ -66,7 +116,9 @@ function ViewEmployee() {
                     <td>{employee.clocked_in}</td>
 
                     <td>
-                      <button id="btndelete">Delete</button>
+                      <button id="btndelete" 
+                        onClick={() => handleDelete(employees.id)}>Delete</button>
+                      <button id="btnupdate" onClick={() => handleUpdate(employees.id)}>Update</button>
                     </td>
                   </tr>
                 ))}
