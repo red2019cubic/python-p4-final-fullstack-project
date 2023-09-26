@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 
 # Standard library imports
+import json
+import datetime
 import random
 # Remote library imports
-from flask import request, make_response,jsonify, session
+from flask import request, make_response, jsonify, session, Response
 from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
 
@@ -16,7 +18,6 @@ from models import employees_schema, employee_schema, tasks_schema, task_schema,
 
 # Views go here!
 
-    
 
 @app.route('/')
 def index():
@@ -26,7 +27,7 @@ def index():
 
 
 class Employees(Resource):
-    
+
     def get(self):
         employee_list = Employee.query.all()
         response = make_response(employees_schema.jsonify(employee_list),
@@ -44,20 +45,20 @@ class Employees(Resource):
             name=form_json["name"],
             username=form_json["username"],
             admin=form_json["admin"],
-            password_hash=form_json["password_hash"],
+            password_hash=form_json["password"],
         )
 
-        tasks =Task.query.all()
+        tasks = Task.query.all()
         departments = Department.query.all()
-        num_1 = random.randint(0, len(tasks))  
-        num_2 = random.randint(0, len(departments))
+        num_1 = random.randint(0, len(tasks)-1)
+        num_2 = random.randint(0, len(departments)-1)
         task_a = tasks[num_1].name
         department_a = departments[num_2].name
         new_employee.tasks.append(Task(name=task_a))
         new_employee.departments.append(Department(name=department_a))
         db.session.add(new_employee)
         db.session.commit()
-      
+
         return jsonify({'message': 'Employee added successfully'})
 
 
@@ -81,6 +82,8 @@ class EmployeeByID(Resource):
             employee.admin = request.json['admin']
         elif 'username' in request.json:
             employee.username = request.json['username']
+        elif 'password' in request.json:
+            employee.username = request.json['password']
         db.session.add(employee)
         db.session.commit()
         response = make_response(
@@ -95,14 +98,15 @@ class EmployeeByID(Resource):
             return {"error": "Employee not found"}, 404
         db.session.delete(employee)
         db.session.commit()
-        
+
         return jsonify({'message': 'Record deleted successfully'})
+
 
 api.add_resource(EmployeeByID, "/employees/<int:id>")
 
 
 class Tasks(Resource):
-    
+
     def get(self):
         task_list = Task.query.all()
         response = make_response(tasks_schema.jsonify(task_list),
@@ -128,6 +132,7 @@ class Tasks(Resource):
             201,
         )
         return response
+
 
 api.add_resource(Tasks, "/tasks")
 
@@ -164,10 +169,12 @@ class TaskByID(Resource):
         response = make_response("Redcord Deleted seccessfully", 204)
         return response
 
+
 api.add_resource(TaskByID, "/tasks/<int:id>")
 
+
 class Departments(Resource):
-    
+
     def get(self):
         dept_list = Department.query.all()
         response = make_response(departments_schema.jsonify(dept_list),
@@ -197,11 +204,14 @@ class Departments(Resource):
             if isinstance(e, (IntegrityError)):
                 for error in e.orig.args:
                     if "UNIQUE" in error:
-                        errors.append("Email already taken. Please try again")# Get the error message as a string
+                        # Get the error message as a string
+                        errors.append("Email already taken. Please try again")
 
             return {'errors': errors}, 422
-    
+
+
 api.add_resource(Departments, "/departments")
+
 
 def check_for_missing_values(data):
     errors_list = []
@@ -209,6 +219,7 @@ def check_for_missing_values(data):
         if not value:
             errors_list.append(f"{key} is required")
     return errors_list
+
 
 class DepartmentByID(Resource):
 
@@ -243,15 +254,19 @@ class DepartmentByID(Resource):
         response = make_response("Redcord Deleted seccessfully", 204)
         return response
 
+
 api.add_resource(DepartmentByID, "/departments/<int:id>")
 
-@app.route('/login', methods=["POST"])
+
+@app.route('/login', methods=["POST", "GET"])
 def login():
     data = request.get_json()
-    employee = Employee.query.filter(Employee.username == data['username']).first()
+    employee = Employee.query.filter(
+        Employee.username == data['username']).first()
     if employee:
-        if employee.authenticate(data['password_hash']):
-            session["emp_id"] = employee.id 
+        if employee.authenticate(data['password']):
+            session["emp_id"] = employee.id
+
             return employee_schema.jsonify(employee), 200
         else:
             return {"errors": ["Username or password incorrect"]}, 401
@@ -259,6 +274,58 @@ def login():
         return {"errors": ["Username or password incorrect"]}, 401
 
 
+@app.route('/home', methods=["GET"])
+def home():
+
+    employee = db.session.query(Employee).filter(
+        Employee.id == random.randint(1, 10)).first()
+    print(employee)
+    if employee is not None:
+        name = employee.name
+        task = str(employee.tasks[0].name)
+        current_datetime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        response = jsonify(
+            {"name": name, "task": task, "date": current_datetime})
+        return response
+    else:
+        return jsonify({"message": "server error"})
+
+
+@app.route('/clear')
+def clear_session():
+    session['page_views'] = 0
+    return {'message': '200: Successfully cleared session data.'}, 200
+
+
+class Logout(Resource):
+
+    def delete(self):
+
+        session['user_id'] = None
+
+        return {}, 204
+
+
+class CheckSession(Resource):
+
+    def get(self):
+
+        employee = db.session.query(Employee).filter(
+            Employee.id == random.randint(1, 10)).first()
+        print(employee)
+        if employee is not None:
+            name = employee.name
+            task = str(employee.tasks[0].name)
+            current_datetime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            response = jsonify(
+                {"name": name, "task": task, "date": current_datetime})
+            return response
+        else:
+            return jsonify({"message": "server error"})
+
+
+api.add_resource(Logout, '/logout', endpoint='logout')
+
+
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
-
