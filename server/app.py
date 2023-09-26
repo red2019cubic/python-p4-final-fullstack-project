@@ -306,24 +306,6 @@ class Logout(Resource):
         return {}, 204
 
 
-class CheckSession(Resource):
-
-    def get(self):
-
-        employee = db.session.query(Employee).filter(
-            Employee.id == random.randint(1, 10)).first()
-        print(employee)
-        if employee is not None:
-            name = employee.name
-            task = str(employee.tasks[0].name)
-            current_datetime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            response = jsonify(
-                {"name": name, "task": task, "date": current_datetime})
-            return response
-        else:
-            return jsonify({"message": "server error"})
-
-
 api.add_resource(Logout, '/logout', endpoint='logout')
 
 
