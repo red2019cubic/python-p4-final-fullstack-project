@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Header from "./Header.js"
+import Footer from "./Footer.js"
 import "./Header.css"
 import { useNavigate } from "react-router-dom"
 const LoginForm = () => {
@@ -8,7 +9,6 @@ const LoginForm = () => {
     username: "",
     password: "",
   });
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -16,8 +16,11 @@ const LoginForm = () => {
       [name]: value,
     });
   };
- const navigate = useNavigate()
-  const handleSubmit = async (e) => {
+
+const navigate = useNavigate()
+
+
+ const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
@@ -27,7 +30,7 @@ const LoginForm = () => {
       );
 
       console.log(response.data);
-     navigate("/signup")
+     navigate("/dashboard")
       // Handle successful login, e.g., redirect to a dashboard.
     } catch (error) {
       console.error(error);
@@ -37,21 +40,15 @@ const LoginForm = () => {
 
   return (
     <>
-    <Header />
+    
     <div className="container">
       <div className="row justify-content-center">
         <div className="col-sm-8">
         
           <br/>
-          <div>
-            <img
-              className="row justify-content-center" style={{width:"100%", marginLeft:"5px"}}
-              src="https://t4.ftcdn.net/jpg/06/29/59/93/240_F_629599337_BHJl5tJee7b5GtRZUOTylDwRR4N4chSZ.jpg"
-            />
- 
-          </div>
+
           <br/>
-          <form onSubmit={handleSubmit} action="/login" method="POST">
+          <form onSubmit={handleSubmit} method = "POST">
             <div className="form-group">
               <label htmlFor="name" className="form-label">
                 Email:
@@ -68,7 +65,7 @@ const LoginForm = () => {
               />
             </div>
             <div>
-              <label htmlFor="password">Password</label>
+              <label htmlFor="password" className="form-label">Password</label>
               <input
                 type="password"
                 className="form-control"
@@ -92,6 +89,8 @@ const LoginForm = () => {
         </div>
       </div>
     </div>
+    
+
     </>
   );
 };

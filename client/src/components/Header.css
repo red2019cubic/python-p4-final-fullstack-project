@@ -5,6 +5,12 @@ ul {
     overflow: hidden;
     background-color: #333;
   }
+  .footer-logo img {
+    background-color: "black";
+    width: 40px;
+    height: 40px;
+    margin-left: 700px;
+  }
   
   li {
     float: left;
@@ -12,12 +18,12 @@ ul {
   
   li a {
     display: block;
-    color: white;
+    color: rgb(224, 137, 5);
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
   }
   
   li a:hover {
-    background-color: #111;
+    background-color: #070842;
   }

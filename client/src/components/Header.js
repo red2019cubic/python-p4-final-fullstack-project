@@ -1,27 +1,29 @@
 import React from "react";
+import { Link } from "react-router-dom"
 
 const Header = () => {
   return (
     <>
-      <div class="fixed-header">
-        <div class="container">
+      <div className="fixed-header">
+        <div className="container">
           <ul>
             <li>
-              <a class="active" href="#home">
-                Home
-              </a>
+            <Link to="/"> Home</Link>
             </li>
             <li>
-              <a href="#news">News</a>
+            <Link to="/signup">Sign Up</Link>
             </li>
             <li>
-              <a href="#contact">Contact</a>
+            <Link to="/dashboard">Dashboard</Link>
             </li>
             <li>
-              <a href="#about">About</a>
+            <div className="footer-logo">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxGUNWjxAr_TssIaqIwqDUDRb4maXS_ni068VKW7Vpbw&s" alt="Logo" />
+         </div>
             </li>
           </ul>
         </div>
+
       </div>
     </>
   );

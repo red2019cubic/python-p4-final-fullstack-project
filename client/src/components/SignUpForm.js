@@ -3,42 +3,45 @@ import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import Header from "./Header.js"
 import "./Header.css"
+import "./SignUp.css"
+import axios from "axios";
+import Footer from "./Footer.js"
 
+function SignUpForm() {
 
-function SignUpForm({ updateUser }) {
-  // const [userData, setUserData] = useState({
-  //   name: "",
-  //   email: "",
-  //   password: "",
-  // });
-  const [errors, setErrors] = useState([]);
-  // const navigate = useNavigate();
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   const config = {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({
-  //       name: userData.name,
-  //       password: userData.password,
-  //     }),
-  //   };
-  //   fetch("/login", config).then((resp) => {
-  //     if (resp.ok) {
-  //       resp.json().then((user) => {
-  //         updateUser(user);
-  //         navigate("/");
-  //       });
-  //     } else {
-  //       resp.json().then((data) => {
-  //         setTimeout(() => {
-  //           setErrors([]);
-  //         }, 3000);
-  //         setErrors(data.errors);
-  //       });
-  //     }
-  //   });
-  // };
+    const [formData, setFormData] = useState({
+        username: "",
+        name: "",
+        admin: "",
+        password: "",
+      });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+
+        setFormData({
+          ...formData,
+          [name]: value,
+        });
+      };
+    const navigate = useNavigate()
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+    
+        try {
+          const response = await axios.post(
+            "/employees",
+            formData
+          );
+    
+          console.log(response.data);
+         navigate("/login")
+          // Handle successful login, e.g., redirect to a dashboard.
+        } catch (error) {
+          console.error(error);
+          // Handle login error.
+        }
+      };
 
   return (
     <>
@@ -46,32 +49,21 @@ function SignUpForm({ updateUser }) {
     <div className="container" >
       <div className="row justify-content-center">
         <div className="col-sm-8">
-        <h2
-            className="row justify-content-center" 
-            style={{ color: "darkorange" }}
-          >
-            CVG9 Employee Login
-          </h2>
-          <br/>
-
-          <div>
-            <img
-              className="row justify-content-center" style={{width:"100%", marginLeft:"5px"}}
-              src="https://t4.ftcdn.net/jpg/06/29/59/93/240_F_629599337_BHJl5tJee7b5GtRZUOTylDwRR4N4chSZ.jpg"
-            />
- 
-          </div>
-        <form action="/signup" method="POST">
+            <h2 className="row justify-content-center">SignUp Form</h2>
+        <br/>
+        <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="name" className="form-label">
+            <label htmlFor="name" className="form-label" >
               Name:
             </label>
             <input
-              type="email"
+              type="name"
               className="form-control"
               id="name"
               placeholder="Enter your name"
               name="name"
+              value={formData.name}
+              onChange={handleChange}
             />
           </div>
           <div className="form-group">
@@ -84,6 +76,8 @@ function SignUpForm({ updateUser }) {
               id="email"
               placeholder="Enter email"
               name="username"
+              value={formData.username}
+              onChange={handleChange}
             />
           </div>
           <div className="mb-3">
@@ -93,35 +87,39 @@ function SignUpForm({ updateUser }) {
             <input
               type="text"
               className="form-control"
+              id="admin"
               placeholder="Enter 0 or 1"
               name="admin"
+            
+              value={formData.admin}
+              onChange={handleChange}
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="pwd" className="form-label">
+            <label htmlFor="password" className="form-label">
               Password:
             </label>
             <input
               type="password"
               className="form-control"
-              id="pwd"
+              id="password"
               placeholder="Enter password"
               name="password"
+              value={formData.password}
+              onChange={handleChange}
             />
           </div>
  
-
-            <a href="/login" className="btn btn-primary">
-            LogIn
-            </a>
-          
-
+          <button type="submit" className="btn btn-primary" style={{marginRight:"20px"}}>
+              Submit
+            </button>
         </form>
 
         </div>
 
       </div>
     </div>
+    <Footer />
     </>
   );
 }
