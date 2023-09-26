@@ -110,6 +110,14 @@ function SignUpForm() {
               >
                 Submit
               </button>
+
+              <button
+                type="submit"
+                className="btn btn-primary"
+                style={{ marginRight: "20px" }}
+              >
+                Update
+              </button>
             </form>
           </div>
         </div>
