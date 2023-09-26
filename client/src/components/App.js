@@ -2,12 +2,12 @@ import React from "react";
 import LogInForm from "./LogInForm";
 import SignUpForm from "./SignUpForm";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Home from "./Home"
-import ViewEmployee from "./ViewEmployee"
+import Home from "./Home";
+import ViewEmployee from "./ViewEmployee";
 import { useState } from "react";
 import axios from "axios";
 import Dashboard from "./Dashboard";
-
+import Logout from "./Logout";
 
 // import { useNavigate } from "react-router-dom"
 function App() {
@@ -16,15 +16,7 @@ function App() {
     password: "",
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-//  const navigate = useNavigate()
- const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
@@ -34,11 +26,8 @@ function App() {
       );
 
       console.log(response.data);
-    //  navigate("/")
-      // Handle successful login, e.g., redirect to a dashboard.
     } catch (error) {
       console.error(error);
-      // Handle login error.
     }
   };
 
@@ -48,12 +37,14 @@ function App() {
         <Router>
           <Routes>
             <Route path="/" element={<Home />} />
-             <Route path="/login" element={<LogInForm handdleSubmit={handleSubmit} />} /> */}
+            <Route
+              path="/login"
+              element={<LogInForm handleSubmit={handleSubmit} />}
+            />
+            <Route path="/logout" element={<Logout />} />
             <Route path="/signup" element={<SignUpForm />} />
             <Route path="/dashboard" element={<Dashboard />} />
-
             <Route path="/view" element={<ViewEmployee />} />
-           
           </Routes>
         </Router>
       </main>

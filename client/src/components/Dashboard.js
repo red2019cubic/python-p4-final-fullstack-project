@@ -34,7 +34,7 @@ function Dashboard() {
 
       <div className="content">
         <h2>
-          Your Assignment For Today {formattedDate} {formattedTime}
+          Your Assignment For Today's Date {formattedDate} {formattedTime}
         </h2>
         <h2>{userData.task}</h2>
       </div>

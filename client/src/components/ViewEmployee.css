@@ -26,8 +26,8 @@
 #btndelete{
     border-radius: 5px;
     color:white;
-    margin-right : 5px;
-    background-color: red;
+    width : 100px;
+    background-color: rgb(255, 0, 128);
   
   }
 
