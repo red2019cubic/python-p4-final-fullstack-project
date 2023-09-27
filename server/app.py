@@ -278,8 +278,8 @@ def login():
         return {"errors": ["Username or password incorrect"]}, 401
 
 
-@app.route('/home', methods=["GET"])
-def home():
+@app.route('/checksession', methods=["GET"])
+def CheckSession():
     number = Employee.query.count()
     employee = db.session.query(Employee).filter(
         Employee.id == random.randint(1, number)).first()
