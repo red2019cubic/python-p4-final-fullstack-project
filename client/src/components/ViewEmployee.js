@@ -6,6 +6,9 @@ import "./Header.css";
 import "./Footer.css";
 
 function ViewEmployee() {
+  const currentDate = new Date();
+  const formattedDate = currentDate.toLocaleDateString();
+  const formattedTime = currentDate.toLocaleTimeString();
   const [employees, setEmployees] = useState([]);
   const [search, setSearch] = useState("");
   try {
@@ -48,6 +51,7 @@ function ViewEmployee() {
                   <th scope="col">Admin</th>
                   <th scope="col">Loged IN</th>
                   <th scope="col">Loged OUT</th>
+                  <th scope="col">Date</th>
                   <th scope="col">Task</th>
                   <th scope="col">Delete/Update</th>
                 </tr>
@@ -70,7 +74,9 @@ function ViewEmployee() {
                       <td>{employee.name}</td>
                       <td>{employee.admin}</td>
                       <td>{employee.clocked_in}</td>
-                      <td>{employee.clocked_in}</td>
+                      <td>{formattedTime}</td>
+                      <td>{formattedDate}</td>
+
                       <td>{employee.tasks[0].name}</td>
 
                       <td>
@@ -80,7 +86,6 @@ function ViewEmployee() {
                         >
                           Delete
                         </button>
-          
                       </td>
                     </tr>
                   ))}

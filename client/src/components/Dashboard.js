@@ -3,21 +3,24 @@ import Header from "./Header";
 import Footer from "./Footer";
 import "./Dashboard.css";
 
+
 function Dashboard() {
   const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(false);
   const currentDate = new Date();
   const formattedDate = currentDate.toLocaleDateString();
   const formattedTime = currentDate.toLocaleTimeString();
+
+ 
   useEffect(() => {
-    fetch("http://localhost:5555/home")
+    fetch("/home")
       .then((r) => r.json())
       .then((userData) => {
         setUserData(userData);
         console.log(userData);
       });
   }, []);
-  console.log(userData);
+  
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -36,7 +39,7 @@ function Dashboard() {
         <h2>
           Your Assignment For Today's Date {formattedDate} {formattedTime}
         </h2>
-        <h2>{userData.task}</h2>
+        <h2 style={{color:"darkgreen"}}>{userData.task}</h2>
       </div>
       <br />
       <br />

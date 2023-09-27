@@ -8,6 +8,7 @@ from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from flask_marshmallow import Marshmallow
+from flask_session import Session
 
 
 # Local imports
@@ -16,8 +17,10 @@ from flask_marshmallow import Marshmallow
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.secret_key = b'=\xf4?\xb3d\x11\xcfh\xda\xa6m\xa6\x05\xcd\xc5;'
+app.secret_key = b'\xd2\x7f\xdb\x8aB\xa4\x17\x05\x1e0\xaem!\x17aK'
 app.json.compact = False
+
+
 
 # Define metadata, instantiate db
 metadata = MetaData(naming_convention={

@@ -17,6 +17,7 @@ bcrypt = "*"
 postgres = "*"
 flask-marshmallow = "*"
 marshmallow-sqlalchemy = "*"
+flask-session = "*"
 
 [requires]
 python_full_version = "3.8.13"

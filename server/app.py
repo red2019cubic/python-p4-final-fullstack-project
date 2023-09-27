@@ -8,15 +8,19 @@ import random
 from flask import request, make_response, jsonify, session, Response
 from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
+from flask_cors import CORS
 
 
 # Local imports
 from config import app, db, api
+import ipdb
 # Add your model imports
 from models import Employee, Task, Department
 from models import employees_schema, employee_schema, tasks_schema, task_schema, departments_schema, department_schema
 
 # Views go here!
+
+CORS(app)
 
 
 @app.route('/')
@@ -289,7 +293,6 @@ def home():
         return response
     else:
         return jsonify({"message": "server error"})
-
 
 @app.route('/clear')
 def clear_session():
