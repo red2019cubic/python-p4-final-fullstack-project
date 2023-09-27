@@ -16,11 +16,13 @@
 ## Routes
 
     [x]- employees (CRUD)
-    [x]- tasks (CRUD)
-    [x]- departments (CRUD)
     [x]- login with session
+    [x]- checksession
 
 # Front-End
 
-    [x]- Login component
-    [x]- Signup form component
+    [x]- Login 
+    [x]- Signup 
+    [x]- Header
+    [x]- Footer
+    [x]- Dashboard

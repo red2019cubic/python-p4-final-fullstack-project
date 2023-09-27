@@ -281,12 +281,15 @@ def login():
 @app.route('/checksession', methods=["GET"])
 def CheckSession():
     number = Employee.query.count()
+    emp_id = session.get("emp_id")
+    tasks = Task.query.all()
+    print(len(tasks))
     employee = db.session.query(Employee).filter(
-        Employee.id == random.randint(1, number)).first()
+        Employee.id == emp_id).first()
     print(employee)
     if employee is not None:
         name = employee.name
-        task = str(employee.tasks[0].name)
+        task = str(tasks[random.randint(0, len(tasks) - 1)].name)
         current_datetime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         response = jsonify(
             {"name": name, "task": task, "date": current_datetime})
@@ -296,7 +299,7 @@ def CheckSession():
 
 @app.route('/clear')
 def clear_session():
-    session['page_views'] = 0
+    session['emp_id'] = 0
     return {'message': '200: Successfully cleared session data.'}, 200
 
 
@@ -304,9 +307,11 @@ class Logout(Resource):
 
     def delete(self):
 
-        session['user_id'] = None
-
-        return {}, 204
+            if session.get('emp_id'):
+                session['emp_id'] = None
+                return {}, 204
+    
+            return jsonify({'errors': ['Unauthorized']}, 401)
 
 
 api.add_resource(Logout, '/logout', endpoint='logout')

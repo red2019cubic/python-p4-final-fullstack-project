@@ -3,12 +3,19 @@ import { useNavigate } from 'react-router-dom';
 import Header from "./Header";
 import Footer from "./Footer";
 import "./Logout.css"
+import ViewEmployee from "./ViewEmployee";
 function Logout() {
     const navigate = useNavigate();
+    
     const handleLogout = () => {
-
-        navigate('/');
-      };
+        fetch("/logout", { method: "DELETE" }).then((r) => {
+            if (r.ok) {
+              navigate('/')
+            }
+          });
+        }
+      
+      
       return (
         <>
         <Header />

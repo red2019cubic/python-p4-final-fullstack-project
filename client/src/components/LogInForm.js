@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
 import { useFormik, handleSubmit } from "formik";
@@ -14,21 +14,6 @@ const LoginForm = () => {
   const navigate = useNavigate();
 
   const onSubmit = () => {
-    //   try {
-    //     const response = await axios.post(
-    //       "http://localhost:5555/login",
-    //       formik.values
-    //     );
-
-    //     setFormData(response);
-    //     navigate("/dashboard");
-    //     setTimeout(() => navigate("/"), 5000);
-    //   } catch (error) {
-    //     alert("incorrect username or password");
-
-    //   }
-    // };
-
     fetch("/login", {
       method: "POST",
       headers: {
@@ -36,15 +21,21 @@ const LoginForm = () => {
       },
       body: JSON.stringify(formik.values),
     })
-      .then((r) => r.json())
-      .then((newItem) => setFormData(newItem));
-    navigate("/dashboard");
-    setTimeout(() => navigate("/"), 5000);
+      .then((response) => response.json())
+      .then((newEmployee) => {
+        // Handle the response, e.g., set form data or perform other actions
+        setFormData(newEmployee);
+
+        // Redirect to the dashboard after successful login
+        navigate("/dashboard");
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
   const formik = useFormik({
     initialValues: {
-      username: "",
-      password: "",
+      formData,
     },
     validationSchema: LogInSchema,
     onSubmit,
