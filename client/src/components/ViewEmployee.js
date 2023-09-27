@@ -23,10 +23,20 @@ function ViewEmployee() {
     console.error(error);
   }
   const handleDelete = (id) => {
-    fetch(`/employees/${id}`, { method: "DELETE" }).then((res) => {
-      alert(`${res.name} Record Deleted Successfully`);
-    });
-  };
+    fetch(`/employees/${id}`, { method: "DELETE" ,}).then((response) => {
+        if (response.status === 200) {
+          // Deletion was successful, update the employee list
+          setEmployees(employees);
+          alert(`Employee id = ${id} Deleted Successfully` )
+        } else {
+          console.error('Deletion failed.');
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      })
+    }
+  
   return (
     <>
       <Header />
@@ -82,7 +92,8 @@ function ViewEmployee() {
                       <td>
                         <button
                           id="btndelete"
-                          onClick={() => handleDelete(employees.id)}
+                          
+                          onClick={() => handleDelete(employee.id)}
                         >
                           Delete
                         </button>

@@ -102,8 +102,8 @@ class EmployeeByID(Resource):
             return {"error": "Employee not found"}, 404
         db.session.delete(employee)
         db.session.commit()
-
-        return jsonify({'message': 'Record deleted successfully'})
+        response = make_response(employee_schema.jsonify(employee), 200)
+        return response
 
 
 api.add_resource(EmployeeByID, "/employees/<int:id>")
