@@ -280,9 +280,9 @@ def login():
 
 @app.route('/home', methods=["GET"])
 def home():
-
+    number = Employee.query.count()
     employee = db.session.query(Employee).filter(
-        Employee.id == random.randint(1, 10)).first()
+        Employee.id == random.randint(1, number)).first()
     print(employee)
     if employee is not None:
         name = employee.name

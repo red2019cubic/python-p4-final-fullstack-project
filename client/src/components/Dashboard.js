@@ -13,15 +13,20 @@ function Dashboard() {
 
  
   useEffect(() => {
-    fetch("/home")
-      .then((r) => r.json())
-      .then((userData) => {
-        setUserData(userData);
-        console.log(userData);
+    fetch("/checksession", {})
+      .then((r) => {
+        if (r.ok){
+            r.json().then((userData) => setUserData(userData))
+               
+              
+        }
+
       });
+      
   }, []);
   
   if (loading) {
+    setLoading(loading)
     return <div>Loading...</div>;
   }
 
