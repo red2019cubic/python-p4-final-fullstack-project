@@ -1,41 +1,41 @@
 import React, { useState } from "react";
 import axios from "axios";
-import Header from "./Header.js";
-import Footer from "./Footer.js";
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
+import { useFormik, handleSubmit } from "formik";
+import { LogInSchema } from "./LogInSchema.js";
+
 const LoginForm = () => {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
 
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const onSubmit = async () => {
     try {
       const response = await axios.post(
         "http://localhost:5555/login",
-        formData
+        formik.values
       );
 
-      console.log(response.data);
+      setFormData(response);
       navigate("/dashboard");
-      // Handle successful login, e.g., redirect to a dashboard.
+      setTimeout(() => navigate("/"), 5000);
     } catch (error) {
-      console.error(error);
-      // Handle login error.
+      alert("incorrect username or password");
+   
     }
   };
+  const formik = useFormik({
+    initialValues: {
+      username: "",
+      password: "",
+    },
+    validationSchema: LogInSchema,
+    onSubmit,
+  });
 
   return (
     <>
@@ -45,7 +45,7 @@ const LoginForm = () => {
             <br />
 
             <br />
-            <form onSubmit={handleSubmit} method="POST">
+            <form onSubmit={formik.handleSubmit} method="POST">
               <div className="form-group">
                 <label htmlFor="name" className="form-label">
                   Email:
@@ -57,9 +57,13 @@ const LoginForm = () => {
                   className="form-control"
                   placeholder="Enter your email"
                   name="username"
-                  value={formData.username}
-                  onChange={handleChange}
+                  value={formik.values.username}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                 />
+                {formik.errors.username && formik.touched.username && (
+                  <span className="field-error">{formik.errors.username}</span>
+                )}
               </div>
               <div>
                 <label htmlFor="password" className="form-label">
@@ -71,9 +75,13 @@ const LoginForm = () => {
                   placeholder="Enter password"
                   name="password"
                   id="password"
-                  value={formData.password}
-                  onChange={handleChange}
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                 />
+                {formik.errors.password && formik.touched.password && (
+                  <span className="field-error">{formik.errors.password}</span>
+                )}
               </div>
               <br />
               <button

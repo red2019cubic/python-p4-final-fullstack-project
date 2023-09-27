@@ -9,7 +9,6 @@ import axios from "axios";
 import Dashboard from "./Dashboard";
 import Logout from "./Logout";
 
-// import { useNavigate } from "react-router-dom"
 function App() {
   const [formData, setFormData] = useState({
     username: "",

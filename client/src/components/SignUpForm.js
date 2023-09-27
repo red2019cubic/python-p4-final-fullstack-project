@@ -6,87 +6,65 @@ import "./Header.css";
 import "./SignUp.css";
 import axios from "axios";
 import Footer from "./Footer.js";
-import {  useFormik } from "formik"
+import { useFormik } from "formik";
 import { SignUpSchema } from "./SignUpSchema.js";
 
 function SignUpForm() {
-  
-    const [response, setResponse] = useState(null);
-    const onSubmit = async (values, actions) => {
-        
-    
-        try {
-          const response = await axios.post("/employees", formData);
-    
-          console.log(response.data);
-          navigate("/");
-        } catch (error) {
-          console.error(error);
-        }
-        actions.resetForm()
-      };
-    const formik = useFormik({
-        initialValues:
-        {
-        name:"",
-        username:"",
-        admin:'',
-        password:"",
+  const [response, setResponse] = useState(null);
+  const onSubmit = async (values, actions) => {
+    try {
+      const response = await axios.post("/employees", formik.values);
+
+      console.log(response.data);
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+    }
+    actions.resetForm();
+  };
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      username: "",
+      admin: "",
+      password: "",
     },
-    validationSchema:SignUpSchema,
+    validationSchema: SignUpSchema,
     onSubmit,
-});
-    const [formData, setFormData] = useState({
-        username: "",
-        name: "",
-        admin: "",
-        password: "",
-      });
+  });
+  const [formData, setFormData] = useState({
+    username: "",
+    name: "",
+    admin: "",
+    password: "",
+  });
 
-  
-      // Make a PATCH request
-      const handleUpdate = (id) => {
-        fetch('/employees/${id}', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          // You may need to include other headers like authentication tokens here
-        },
-        body: JSON.stringify(formData),
+  // Make a PATCH request
+  const handleUpdate = (id) => {
+    fetch("/employees/${id}", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => {
+        setResponse(response);
+        return response.json();
       })
-        .then((response) => {
-          // Handle the response (success or error)
-          setResponse(response);
-          return response.json();
-        })
-        .then((data) => {
-          // Handle the data received after the update
-          setFormData(data);
-          alert("Employee Updated Successfully")
-        })
-        .catch((error) => {
-          // Handle any errors that occur during the fetch request
-          console.error('Error:', error);
-        });
-    
-    };
+      .then((data) => {
+        setFormData(data);
+        alert("Employee Updated Successfully");
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
 
-
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-
-//     setFormData({
-//       ...formData,
-//       [name]: value,
-//     });
-//   };
   const navigate = useNavigate();
-
-  
 
   return (
     <>
-
       <Header />
       <div className="container">
         <div className="row justify-content-center">
@@ -108,12 +86,10 @@ function SignUpForm() {
                   value={formik.values.name}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-
                 />
-                {formik.errors.name && formik.touched.name  && (
-                    <span className="field-error">{formik.errors.name}</span>
+                {formik.errors.name && formik.touched.name && (
+                  <span className="field-error">{formik.errors.name}</span>
                 )}
-            
               </div>
               <div className="form-group">
                 <label htmlFor="email" className="form-label">
@@ -128,10 +104,9 @@ function SignUpForm() {
                   value={formik.values.username}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  required
                 />
-                {formik.errors.username && formik.touched.username  && (
-                    <span className="field-error">{formik.errors.username}</span>
+                {formik.errors.username && formik.touched.username && (
+                  <span className="field-error">{formik.errors.username}</span>
                 )}
               </div>
               <div className="mb-3">
@@ -147,10 +122,9 @@ function SignUpForm() {
                   value={formik.values.admin}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  
                 />
-                {formik.errors.admin && formik.touched.admin  && (
-                    <span className="field-error">{formik.errors.admin}</span>
+                {formik.errors.admin && formik.touched.admin && (
+                  <span className="field-error">{formik.errors.admin}</span>
                 )}
               </div>
               <div className="mb-3">
@@ -166,10 +140,9 @@ function SignUpForm() {
                   value={formik.values.password}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  
                 />
-                {formik.errors.password && formik.touched.password  && (
-                    <span className="field-error">{formik.errors.password}</span>
+                {formik.errors.password && formik.touched.password && (
+                  <span className="field-error">{formik.errors.password}</span>
                 )}
               </div>
 
@@ -194,7 +167,6 @@ function SignUpForm() {
         </div>
       </div>
       <Footer />
-     
     </>
   );
 }
