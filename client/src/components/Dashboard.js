@@ -34,7 +34,7 @@ function Dashboard() {
       <br />
 
       <div className="content">
-      <h1 style={{ color: "green", fontWeight: "bold"}}>Welcome {userData.name.toUpperCase()}</h1>
+      <h1 style={{ color: "green", fontWeight: "bold"}}>Welcome {userData.name}</h1>
         <h2>
             <br/>
           Your Assignment For Today's Date {formattedDate} {formattedTime}

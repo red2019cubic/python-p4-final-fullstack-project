@@ -26,3 +26,27 @@
     [x]- Header
     [x]- Footer
     [x]- Dashboard
+
+## home screenshot:
+
+![Alt text](image.png)
+
+
+## sign up page:
+
+![Alt text](image-2.png)
+
+## view employees page:
+
+![Alt text](image-3.png)
+
+## login page :
+
+![Alt text](image-4.png)
+
+
+## dashboard page:
+
+![Alt text](image-5.png)
+
+
