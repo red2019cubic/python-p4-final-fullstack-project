@@ -57,7 +57,7 @@ function SignUpForm() {
         alert("Employee Updated Successfully");
       })
       .catch((error) => {
-        console.error("Error:", error);
+        alert(error);
       });
   };
 

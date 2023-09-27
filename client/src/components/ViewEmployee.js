@@ -48,6 +48,7 @@ function ViewEmployee() {
                   <th scope="col">Admin</th>
                   <th scope="col">Loged IN</th>
                   <th scope="col">Loged OUT</th>
+                  <th scope="col">Task</th>
                   <th scope="col">Delete/Update</th>
                 </tr>
               </thead>
@@ -70,6 +71,7 @@ function ViewEmployee() {
                       <td>{employee.admin}</td>
                       <td>{employee.clocked_in}</td>
                       <td>{employee.clocked_in}</td>
+                      <td>{employee.tasks[0].name}</td>
 
                       <td>
                         <button
