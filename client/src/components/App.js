@@ -20,7 +20,7 @@ function App() {
 
     try {
       const response = await axios.post(
-        "http://localhost:5555/login",
+        "/login",
         formData
       );
 

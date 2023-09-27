@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
@@ -13,20 +13,33 @@ const LoginForm = () => {
 
   const navigate = useNavigate();
 
-  const onSubmit = async () => {
-    try {
-      const response = await axios.post(
-        "http://localhost:5555/login",
-        formik.values
-      );
+  const onSubmit = () => {
+    //   try {
+    //     const response = await axios.post(
+    //       "http://localhost:5555/login",
+    //       formik.values
+    //     );
 
-      setFormData(response);
-      navigate("/dashboard");
-      setTimeout(() => navigate("/"), 5000);
-    } catch (error) {
-      alert("incorrect username or password");
-   
-    }
+    //     setFormData(response);
+    //     navigate("/dashboard");
+    //     setTimeout(() => navigate("/"), 5000);
+    //   } catch (error) {
+    //     alert("incorrect username or password");
+
+    //   }
+    // };
+
+    fetch("/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formik.values),
+    })
+      .then((r) => r.json())
+      .then((newItem) => setFormData(newItem));
+    navigate("/dashboard");
+    setTimeout(() => navigate("/"), 5000);
   };
   const formik = useFormik({
     initialValues: {
